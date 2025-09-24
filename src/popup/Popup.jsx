@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import  AudioCapturePermission from "../components/permission"
 
 const Popup = () => {
   const [count, setCount] = useState(0);
@@ -64,6 +65,7 @@ const Popup = () => {
       >
         Change Page Color
       </button>
+      < AudioCapturePermission />
     </div>
   );
 };
