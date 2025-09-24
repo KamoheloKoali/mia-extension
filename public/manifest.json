@@ -1,11 +1,11 @@
 {
   "manifest_version": 3,
-  "name": "React Chrome Extension",
+  "name": "MIA",
   "version": "1.0.0",
-  "description": "A React-based Chrome extension with Tailwind CSS",
+  "description": "Designed to automate minutes for meetings ",
   "action": {
     "default_popup": "popup.html",
-    "default_title": "React Extension"
+    "default_title": "Meeting Minutes Assistant "
   },
   "content_scripts": [
     {
