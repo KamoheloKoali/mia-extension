@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Page for MIA Extension</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #6a0dad;
+      text-align: center;
+    }
+    .test-content {
+      margin: 20px 0;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>MIA Extension Test Page</h1>
+    <div class="test-content">
+      <h2>Testing Instructions:</h2>
+      <ol>
+        <li>Load the extension in Chrome by going to <code>chrome://extensions/</code></li>
+        <li>Enable "Developer mode" in the top right</li>
+        <li>Click "Load unpacked" and select the <code>/home/bad-dev/mia-extension/dist</code> folder</li>
+        <li>Click on the MIA extension icon in the toolbar</li>
+        <li>Click "START RECORDING" to begin recording</li>
+        <li>A floating recording control should appear on this page</li>
+        <li>You can drag the floating control around</li>
+        <li>Click "STOP" on either the floating control or in the popup to stop recording</li>
+      </ol>
+    </div>
+    
+    <div class="test-content">
+      <h2>Recording Options Available:</h2>
+      <ul>
+        <li>🎤 <strong>Microphone Only</strong> - Records only your voice</li>
+        <li>🖥️ <strong>Desktop Audio</strong> - Records system audio (captures other meeting participants)</li>
+        <li>🌐 <strong>Browser Tab</strong> - Records audio from the current browser tab</li>
+      </ul>
+    </div>
+
+    <div class="test-content">
+      <h2>Expected Behavior:</h2>
+      <ul>
+        <li>✅ Popup shows "CHOOSE RECORDING TYPE" button</li>
+        <li>✅ Selecting recording type and starting works</li>
+        <li>✅ Desktop audio option records meeting participants</li>
+        <li>✅ Floating control appears during recording</li>
+        <li>✅ Floating control can be dragged around</li>
+        <li>✅ Stop button on floating control stops recording</li>
+        <li>✅ Recording state persists across popup opens/closes</li>
+      </ul>
+    </div>
+
+    <div class="test-content">
+      <h2>Permissions Required</h2>
+      <ul>
+        <li><strong>Microphone Only:</strong> Asks for microphone permission</li>
+        <li><strong>Desktop Audio:</strong> Asks for screen sharing permission (select "Share system audio")</li>
+        <li><strong>Browser Tab:</strong> Uses browser's tab capture API</li>
+      </ul>
+      <p><em>For meeting recordings, choose "Desktop Audio" to capture all participants' voices!</em></p>
+    </div>
+
+    <div class="test-content">
+      <h2>🎯 For Meeting Platforms</h2>
+      <p>To record <strong>other participants</strong> in Zoom, Teams, Meet, etc.:</p>
+      <ol>
+        <li>Open your meeting in the browser</li>
+        <li>Click the MIA extension</li>
+        <li>Select <strong>"Desktop Audio"</strong> recording</li>
+        <li>When prompted, choose to share system audio</li>
+        <li>Start recording - this will capture everyone's voice!</li>
+      </ol>
+    </div>
+  </div>
+</body>
+</html>

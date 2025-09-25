@@ -1,17 +1,58 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Popup.css';
 
 const Popup = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [recordingType, setRecordingType] = useState('microphone');
+  const [showRecordingOptions, setShowRecordingOptions] = useState(false);
 
-  const handleStartRecording = () => {
-    setIsRecording(!isRecording);
-    // Add your recording logic here
-    if (!isRecording) {
-      alert('Recording started!');
-    } else {
-      alert('Recording stopped!');
+  useEffect(() => {
+    // Check recording state when popup opens
+    chrome.runtime.sendMessage({ action: 'getRecordingState' }, (response) => {
+      if (response) {
+        setIsRecording(response.isRecording);
+      }
+    });
+  }, []);
+
+  const handleStartRecording = async () => {
+    if (isLoading) return;
+    
+    setIsLoading(true);
+    
+    try {
+      if (!isRecording) {
+        // Start recording
+        chrome.runtime.sendMessage({ 
+          action: 'startRecording', 
+          recordingType: recordingType 
+        }, (response) => {
+          setIsLoading(false);
+          if (response && response.success) {
+            setIsRecording(true);
+            setShowRecordingOptions(false);
+            alert(`${recordingType} recording started!`);
+          } else {
+            alert(`Failed to start recording: ${response?.message || 'Unknown error'}`);
+          }
+        });
+      } else {
+        // Stop recording
+        chrome.runtime.sendMessage({ action: 'stopRecording' }, (response) => {
+          setIsLoading(false);
+          if (response && response.success) {
+            setIsRecording(false);
+            alert('Recording stopped!');
+          } else {
+            alert(`Failed to stop recording: ${response?.message || 'Unknown error'}`);
+          }
+        });
+      }
+    } catch (error) {
+      setIsLoading(false);
+      alert(`Error: ${error.message}`);
     }
   };
 
@@ -35,12 +76,61 @@ const Popup = () => {
 
       <div className="actions-section">
         <div className="buttons-container">
-          <button 
-            className={`record-btn ${isRecording ? 'recording' : ''}`} 
-            onClick={handleStartRecording}
-          >
-            {isRecording ? 'STOP RECORDING' : 'START RECORDING'}
-          </button>
+          {!isRecording && !showRecordingOptions && (
+            <button 
+              className="record-options-btn"
+              onClick={() => setShowRecordingOptions(true)}
+            >
+              CHOOSE RECORDING TYPE
+            </button>
+          )}
+          
+          {showRecordingOptions && !isRecording && (
+            <div className="recording-options">
+              <h3>Select Recording Source:</h3>
+              <div className="option-buttons">
+                <button 
+                  className={`option-btn ${recordingType === 'microphone' ? 'selected' : ''}`}
+                  onClick={() => setRecordingType('microphone')}
+                >
+                  🎤 MICROPHONE ONLY
+                  <small>Records your voice only</small>
+                </button>
+                <button 
+                  className={`option-btn ${recordingType === 'desktop' ? 'selected' : ''}`}
+                  onClick={() => setRecordingType('desktop')}
+                >
+                  🖥️ DESKTOP AUDIO
+                  <small>Records system audio (includes other participants)</small>
+                </button>
+                <button 
+                  className={`option-btn ${recordingType === 'tab' ? 'selected' : ''}`}
+                  onClick={() => setRecordingType('tab')}
+                >
+                  🌐 BROWSER TAB
+                  <small>Records current tab audio</small>
+                </button>
+              </div>
+              <div className="option-actions">
+                <button 
+                  className="back-btn"
+                  onClick={() => setShowRecordingOptions(false)}
+                >
+                  BACK
+                </button>
+              </div>
+            </div>
+          )}
+          
+          {(isRecording || (!showRecordingOptions && recordingType)) && (
+            <button 
+              className={`record-btn ${isRecording ? 'recording' : ''} ${isLoading ? 'loading' : ''}`} 
+              onClick={handleStartRecording}
+              disabled={isLoading}
+            >
+              {isLoading ? 'PROCESSING...' : (isRecording ? 'STOP RECORDING' : `START ${recordingType.toUpperCase()} RECORDING`)}
+            </button>
+          )}
           
           <button 
             className={`login-btn ${isLoggedIn ? 'logged-in' : ''}`} 
