@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './Popup.css';
+import AudioCapturePermission from "../components/permission"
 
 const Popup = () => {
   const [isRecording, setIsRecording] = useState(false);
@@ -54,6 +55,7 @@ const Popup = () => {
           <span className="purple-text">RECORDING IS TRANSCRIBED AUTOMATICALLY WHEN LOGGED IN</span>
         </div>
       </div>
+      < AudioCapturePermission />
     </div>
   );
 };
