@@ -7,6 +7,9 @@
     "default_popup": "popup.html",
     "default_title": "Meeting Minutes Assistant "
   },
+  "background": {
+    "service_worker": "assets/background2.js"
+  },
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
